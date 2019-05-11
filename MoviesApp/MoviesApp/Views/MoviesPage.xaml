@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:MoviesApp.Behaviors"
+             xmlns:behaviorsPrism="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:converters="clr-namespace:MoviesApp.Converters"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="MoviesApp.Views.MoviesPage"
+             Title="Upcoming Movies"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
+            <converters:ImageFilePathToImageUrlConverter x:Key="ImageFilePathToImageUrlConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Priority="0"
+            Icon="searchwhite.png" 
+            Command="{Binding SearchMovieCommand}" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ListView
+            x:Name="ListMovies"
+            ItemsSource="{Binding Movies}"
+            CachingStrategy="RecycleElement"
+            HasUnevenRows="True"
+            ItemSelected="ListMovies_OnItemSelected">
+            <ListView.Behaviors>
+                <behaviorsPrism:EventToCommandBehavior             
+                    EventName="ItemTapped"  
+                    Command="{Binding MovieDetailCommand}"  
+                    EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+                <behaviors:InfiniteScroll LoadMoreCommand="{Binding LoadMoreMoviesCommand}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid
+                            Padding="12"
+                            ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Frame 
+                                Grid.Column="0"
+                                WidthRequest="120"
+                                HeightRequest="169"
+                                HasShadow="True"
+                                CornerRadius="10"
+                                Margin="0" 
+                                Padding="0">
+                                <forms:CachedImage
+                                    Aspect="AspectFill"
+                                    DownsampleToViewSize="True"
+                                    DownsampleWidth="120"
+                                    DownsampleHeight="169"
+                                    BitmapOptimizations="True"
+                                    LoadingPlaceholder="posterplaceholder.jpg"
+                                    ErrorPlaceholder="postererror.jpg"
+                                    Source="{Binding PosterPath, Converter={StaticResource ImageFilePathToImageUrlConverter}}"/>
+                            </Frame>
+                            <StackLayout
+                                Grid.Column="1">
+                                <Label 
+                                    Text="{Binding Title}"
+                                    TextColor="Black"
+                                    FontSize="20"
+                                    FontAttributes="Bold"
+                                    Margin="0,8,0,0"/>
+                                <Label 
+                                    VerticalOptions="End"
+                                    Text="{Binding ReleaseDate, StringFormat='On {0:MMMM dd}, {0:yyyy}'}"
+                                    TextColor="DimGray"
+                                    FontSize="14"/>
+                                <Label 
+                                    Text="{Binding GenreNames}"
+                                    TextColor="DarkGray"
+                                    FontSize="14"/>
+                            </StackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Margin="0,16"/>
+            </ListView.Footer>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

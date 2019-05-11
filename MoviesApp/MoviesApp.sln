@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoviesApp", "MoviesApp\MoviesApp.csproj", "{816ED864-9DE4-45A6-A35A-7540567C3365}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesApp.Android", "MoviesApp.Android\MoviesApp.Android.csproj", "{00D17AF2-4D55-496E-A843-8DF095E61348}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoviesApp.UnitTests", "MoviesApp.UnitTests\MoviesApp.UnitTests.csproj", "{7F77FE4F-09E3-42B2-AE36-E41F1152E04F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{816ED864-9DE4-45A6-A35A-7540567C3365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{816ED864-9DE4-45A6-A35A-7540567C3365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{816ED864-9DE4-45A6-A35A-7540567C3365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{816ED864-9DE4-45A6-A35A-7540567C3365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D17AF2-4D55-496E-A843-8DF095E61348}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7F77FE4F-09E3-42B2-AE36-E41F1152E04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F77FE4F-09E3-42B2-AE36-E41F1152E04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F77FE4F-09E3-42B2-AE36-E41F1152E04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F77FE4F-09E3-42B2-AE36-E41F1152E04F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DAA28FE-C1AA-4295-A222-42CE84388BBB}
+	EndGlobalSection
+EndGlobal

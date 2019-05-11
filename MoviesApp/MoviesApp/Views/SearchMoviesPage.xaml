@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviorsPrism="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:behaviors="clr-namespace:MoviesApp.Behaviors"
+             xmlns:converters="clr-namespace:MoviesApp.Converters"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:renderers="clr-namespace:MoviesApp.Renderers"
+             x:Class="MoviesApp.Views.SearchMoviesPage"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
+            <converters:ImageFilePathToImageUrlConverter x:Key="ImageFilePathToImageUrlConverter"/>
+            <converters:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
+            <converters:InverseStringNullOrEmptyBoolConverter x:Key="InverseStringNullOrEmptyBoolConverter"/>
+            <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
+            <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid 
+            RowSpacing="0"
+            BackgroundColor="{StaticResource ColorPrimaryDark}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="54" />
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid 
+                Grid.Row="0"
+                HeightRequest="56"
+                ColumnSpacing="0"
+                BackgroundColor="{StaticResource ColorPrimary}" 
+                Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Image
+                    Grid.Column="0"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    Margin="12"
+                    Aspect="AspectFit"
+                    Source="arrowbackwhite.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer 
+                             Command="{Binding NavigateBackCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <renderers:NoBorderEntry
+                    x:Name="EntrySearch"
+                    Grid.Column="1"
+                    PlaceholderColor="Gainsboro"
+                    Placeholder="Search for movies"
+                    TextColor="White"
+                    Text="{Binding SearchTerm}">
+                    <renderers:NoBorderEntry.Behaviors>
+                        <behaviorsPrism:EventToCommandBehavior
+                            EventName="TextChanged"
+                            Command="{Binding SearchMovieCommand}"/>
+                    </renderers:NoBorderEntry.Behaviors>
+                </renderers:NoBorderEntry>
+                <ActivityIndicator
+                    Grid.Column="2"
+                    IsRunning="{Binding IsSearchBusy}"
+                    IsVisible="{Binding IsSearchBusy}"
+                    HeightRequest="24"
+                    WidthRequest="24"
+                    Margin="12"/>
+                <Image
+                    Grid.Column="2"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    Margin="12"
+                    Aspect="AspectFit"
+                    Source="actionclearwhite.png">
+                    <Image.Triggers>
+                        <MultiTrigger TargetType="Image">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding IsSearchBusy}" Value="True" />
+                                <BindingCondition Binding="{Binding SearchTerm, Converter={StaticResource StringNullOrEmptyBoolConverter}}" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="IsVisible" Value="False" />
+                        </MultiTrigger>
+                        <MultiTrigger TargetType="Image">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding IsSearchBusy}" Value="False" />
+                                <BindingCondition Binding="{Binding SearchTerm, Converter={StaticResource StringNullOrEmptyBoolConverter}}" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="IsVisible" Value="False" />
+                        </MultiTrigger>
+                    </Image.Triggers>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding ClearCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+            <ListView
+                x:Name="ListMovies"
+                Grid.Row="1"
+                BackgroundColor="White"
+                ItemsSource="{Binding Movies, Mode=TwoWay}"
+                CachingStrategy="RecycleElement"
+                HasUnevenRows="True"
+                ItemSelected="ListMovies_OnItemSelected">
+                <ListView.Behaviors>
+                    <behaviorsPrism:EventToCommandBehavior             
+                        EventName="ItemTapped"  
+                        Command="{Binding MovieDetailCommand}"  
+                        EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}" />
+                    <behaviors:InfiniteScroll LoadMoreCommand="{Binding LoadMoreMoviesCommand}" />
+                </ListView.Behaviors>
+                <ListView.Header>
+                    <StackLayout>
+                        <StackLayout
+                            IsVisible="{Binding SearchTerm, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                            <Label 
+                                IsVisible="{Binding Movies.Count, Converter={StaticResource InverseCountToBoolConverter}}"
+                                TextColor="Black"
+                                Text="Sorry... We have not found this movie."
+                                FontSize="26"
+                                FontAttributes="Bold"
+                                Margin="20,20,20,0"/>
+                            <Label
+                                IsVisible="{Binding Movies.Count, Converter={StaticResource InverseCountToBoolConverter}}"
+                                TextColor="DarkGray"
+                                Text="Try to find another movie."
+                                FontSize="18"
+                                Margin="20,0,20,20"/>
+                            <Label
+                                IsVisible="{Binding Movies.Count, Converter={StaticResource CountToBoolConverter}}"
+                                TextColor="Black"
+                                Text="MOVIES"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                Margin="12"/>
+                        </StackLayout>
+                        <Label
+                            IsVisible="{Binding SearchTerm, Converter={StaticResource InverseStringNullOrEmptyBoolConverter}}"
+                            TextColor="Black"
+                            Text="Popular searches"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            Margin="12"/>
+                    </StackLayout>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="156"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <forms:CachedImage
+                                    Grid.Column="0"
+                                    Aspect="AspectFill"
+                                    HeightRequest="88"
+                                    WidthRequest="156"
+                                    DownsampleHeight="88"
+                                    DownsampleWidth="156"
+                                    DownsampleToViewSize="True"
+                                    LoadingPlaceholder="backdropplaceholder.jpg"
+                                    ErrorPlaceholder="backdroperror.jpg"
+                                    Source="{Binding BackdropPath, Converter={StaticResource ImageFilePathToImageUrlConverter}}"/>
+                                <Label 
+                                    Grid.Column="1"
+                                    Text="{Binding Title}"
+                                    TextColor="Black"
+                                    FontSize="16"
+                                    VerticalTextAlignment="Center"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <ActivityIndicator
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Margin="0,16"/>
+                </ListView.Footer>
+            </ListView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

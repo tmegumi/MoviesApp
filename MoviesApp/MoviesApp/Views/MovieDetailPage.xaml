@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:MoviesApp.Converters"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="MoviesApp.Views.MovieDetailPage"
+             Title="{Binding Movie.Title}"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ImageFilePathToImageUrlConverter x:Key="ImageFilePathToImageUrlConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid 
+                RowSpacing="0" 
+                Padding="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+                <forms:CachedImage
+                    x:Name="ImageBackdrop"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="-16,-16,-16,0"
+                    Aspect="AspectFill"
+                    DownsampleToViewSize="True"
+                    LoadingPlaceholder="backdropplaceholder.jpg"
+                    ErrorPlaceholder="backdroperror.jpg"
+                    Source="{Binding Movie.BackdropPath, Converter={StaticResource ImageFilePathToImageUrlConverter}}"/>
+                <ContentView
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    BackgroundColor="#000000" 
+                    Opacity="0.3"
+                    Margin="-16,-16,-16,0"/>
+                <StackLayout
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalOptions="End"
+                    Margin="0,0,0,16">
+                    <Label 
+                        Text="{Binding Movie.Title}"
+                        TextColor="White"
+                        FontSize="24"
+                        FontAttributes="Bold"/>
+                    <Label 
+                        Text="{Binding Movie.ReleaseDate, StringFormat='{}{0:MMMM} {0:dd}, {0:yyyy}'}"
+                        TextColor="White"
+                        FontSize="16"/>
+                </StackLayout>
+                <Frame
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    WidthRequest="120"
+                    HeightRequest="169"
+                    VerticalOptions="End"
+                    HasShadow="True"
+                    CornerRadius="10"
+                    Padding="0"
+                    Margin="0,0,0,16">
+                    <forms:CachedImage
+                        Aspect="AspectFill"
+                        DownsampleToViewSize="True"
+                        DownsampleWidth="120"
+                        DownsampleHeight="169"
+                        LoadingPlaceholder="posterplaceholder.jpg"
+                        ErrorPlaceholder="postererror.jpg"
+                        Source="{Binding Movie.PosterPath, Converter={StaticResource ImageFilePathToImageUrlConverter}}"/>
+                </Frame>
+                <Label 
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="OVERVIEW"
+                    TextColor="DarkGray"
+                    FontSize="12"
+                    Margin="0,16,0,0"/>
+                <Label 
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Text="{Binding Movie.Overview}"
+                    TextColor="DimGray"
+                    FontSize="16"
+                    LineHeight="1.2"/>
+                <Label 
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Text="{Binding GenreNames}"
+                    TextColor="DarkGray"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    Margin="0,16,0,0"/>
+                <ActivityIndicator
+                    Grid.Row="0"
+                    Grid.RowSpan="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    VerticalOptions="CenterAndExpand"/>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
